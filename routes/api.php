@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\API\CategoryApiController;
 use App\Http\Controllers\API\UserApiController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -16,3 +17,9 @@ Route::prefix('user')->controller(UserApiController::class)->group(function () {
     Route::post('/login', 'login');
     Route::post('/logout', 'logout');
 });
+
+// Category
+Route::prefix('category')->controller(CategoryApiController::class)->group(function () {
+    Route::post('/store', 'store');
+});
+
