@@ -23,5 +23,6 @@ Route::prefix('category')->controller(CategoryApiController::class)->group(funct
     Route::post('/store', 'store');
     Route::get('/show/{id}', 'show');
     Route::post('/update/{id}', 'update');
+    Route::delete('/delete/{id}', 'delete');
 });
 

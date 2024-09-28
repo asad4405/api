@@ -33,7 +33,7 @@ class CategoryApiController extends Controller
 
         $category = Category::create([
             'category_name' => $request->category_name,
-            'image' => $image,
+            'image' => $file_name,
             'created_at' => Carbon::now(),
         ]);
 
@@ -48,7 +48,7 @@ class CategoryApiController extends Controller
     public function show($id)
     {
         $category = Category::findOrFail($id);
-        if(!$category){
+        if (!$category) {
             $response = [
                 'message' => 'No Data Found!',
             ];
@@ -114,5 +114,20 @@ class CategoryApiController extends Controller
 
             return response()->json($response);
         }
+    }
+
+    public function delete($id)
+    {
+        $category = Category::findOrFail($id);
+
+        $del_img = public_path('images/category/' . $category->image);
+        unlink($del_img);
+
+        $category->delete();
+
+        $response = [
+            'message' => 'Category Deleted Success!'
+        ];
+        return response()->json($response);
     }
 }
