@@ -22,5 +22,6 @@ Route::prefix('user')->controller(UserApiController::class)->group(function () {
 Route::prefix('category')->controller(CategoryApiController::class)->group(function () {
     Route::post('/store', 'store');
     Route::get('/show/{id}', 'show');
+    Route::post('/update/{id}', 'update');
 });
 

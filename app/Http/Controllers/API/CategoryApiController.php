@@ -17,8 +17,8 @@ class CategoryApiController extends Controller
     {
         $validator = Validator::make($request->all(), [
             'category_name' => 'required|unique:categories',
-            'icon' => 'required',
-            'icon' => 'image',
+            'image' => 'required',
+            'image' => 'image',
         ]);
 
         if ($validator->fails()) {
@@ -57,5 +57,62 @@ class CategoryApiController extends Controller
             'category' => $category,
         ];
         return response()->json($response);
+    }
+
+    public function update(Request $request, $id)
+    {
+        if ($request->image == '') {
+            $validator = Validator::make($request->all(), [
+                'category_name' => 'required|unique:categories',
+            ]);
+
+            if ($validator->fails()) {
+                $validator->errors()->all();
+            }
+
+            $category = Category::find($id)->update([
+                'category_name' => $request->category_name,
+            ]);
+
+            $response = [
+                'category' => $category,
+                'message' => 'Category Update Success!'
+            ];
+
+            return response()->json($response);
+        } else {
+            $validator = Validator::make($request->all(), [
+                'category_name' => 'required|unique:categories',
+                'image' => 'required',
+                'image' => 'image',
+            ]);
+
+            if ($validator->fails()) {
+                $validator->errors()->all();
+            }
+
+            $category = Category::find($id);
+            $del_img = public_path('uploads/category/' . $category->image);
+            unlink($del_img);
+
+            $image =  $request->image;
+            $extension = $image->extension();
+            $file_name = Str::lower(str_replace(' ', '-', $request->category_name)) . random_int(10000, 50000) . '.' . $extension;
+
+            Image::make($image)->save(public_path('uploads/category/' . $file_name));
+
+            $category = Category::find($id)->update([
+                'category_name' => $request->category_name,
+                'image' => $file_name,
+                'created_at' => Carbon::now(),
+            ]);
+
+            $response = [
+                'category' => $category,
+                'message' => 'Category Update Success!',
+            ];
+
+            return response()->json($response);
+        }
     }
 }
