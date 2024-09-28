@@ -44,4 +44,18 @@ class CategoryApiController extends Controller
 
         return response()->json($response);
     }
+
+    public function show($id)
+    {
+        $category = Category::findOrFail($id);
+        if(!$category){
+            $response = [
+                'message' => 'No Data Found!',
+            ];
+        }
+        $response = [
+            'category' => $category,
+        ];
+        return response()->json($response);
+    }
 }
