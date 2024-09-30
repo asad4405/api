@@ -20,6 +20,7 @@ Route::prefix('user')->controller(UserApiController::class)->group(function () {
 
 // Category
 Route::prefix('category')->controller(CategoryApiController::class)->group(function () {
+    Route::get('/index', 'index');
     Route::post('/store', 'store');
     Route::get('/show/{id}', 'show');
     Route::post('/update/{id}', 'update');

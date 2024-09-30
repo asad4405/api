@@ -13,6 +13,13 @@ use Illuminate\Support\Str;
 
 class CategoryApiController extends Controller
 {
+    public function index()
+    {
+        // $categories = Category::select('category_name','image')->get();
+        $categories = Category::all();
+        return response()->json($categories);
+    }
+
     public function store(Request $request)
     {
         $validator = Validator::make($request->all(), [
@@ -25,11 +32,13 @@ class CategoryApiController extends Controller
             $validator->errors()->all();
         }
 
-        $image =  $request->image;
-        $extension = $image->extension();
-        $file_name = random_int(10000, 50000) . '.' . $extension;
+        // image
+        $image = $request->file('image');
+        $imageName = 'category-'. time() . '.' . $image->getClientOriginalExtension();
+        $image->move(public_path('images/category'), $imageName);
+        $file_name = 'images/category/' . $imageName;
 
-        Image::make($image)->save(public_path('images/category/' . $file_name));
+        // Image::make($image)->save(public_path('images/category/' . $file_name));
 
         $category = Category::create([
             'category_name' => $request->category_name,
