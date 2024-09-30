@@ -21,6 +21,7 @@ Route::middleware('auth')->group(function () {
     Route::prefix('category')->controller(CategoryController::class)->name('category')->group(function(){
         Route::get('/','index')->name('.index');
         Route::get('/add','create')->name('.create');
+        Route::get('/edit/{id}','edit')->name('.edit');
     });
 });
 
